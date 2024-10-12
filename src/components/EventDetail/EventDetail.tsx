@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 import {events} from "../../Data/data";
-
+import styles from '../EventList/EventList.module.css'
 
 const EventDetail: React.FC<{ setNotification: (message: string) => void }> = ({setNotification}) => {
     const {id} = useParams();
@@ -13,18 +13,25 @@ const EventDetail: React.FC<{ setNotification: (message: string) => void }> = ({
         if (event) {
             setNotification(`Спасибо, ваша ставка ${event.team1} vs ${event.team2}, ставка ${event.odds && event.odds[selectedOdds!]} принята`);
             navigate('/');
+            setTimeout(() => {
+                setNotification('')
+            }, 3000)
         }
     };
     if (!event) return <p>Событие не найдено</p>;
 
     return (
-        <div>
-            <h1>{event.team1} vs {event.team2}</h1>
+        <div className={styles.wrapper}>
+            <div className={styles.title}>{event.team1} vs {event.team2}</div>
+            <div className={styles.logoBlock}>
+                <img src={event.logo1} alt={event.team1}/>
+                <img src={event.logo2} alt={event.team2}/>
+            </div>
             <p>Дата: {event.date}</p>
-            <div>
+            <div className={styles.labelBlock}>
                 {event.odds && event.odds.map((odd, index) => (
-                    <label key={index}>
-                        <input
+                    <label className={styles.label} key={index}>
+                        <input className={styles.input}
                             type="radio"
                             name="odds"
                             value={index}
